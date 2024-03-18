@@ -1,4 +1,4 @@
-package com.kg.alatoo.midtermSpring;
+package com.kg.alatoo.midtermSpring.repositories;
 
 import com.kg.alatoo.midtermSpring.entities.Product;
 import com.kg.alatoo.midtermSpring.repositories.ProductRepository;
