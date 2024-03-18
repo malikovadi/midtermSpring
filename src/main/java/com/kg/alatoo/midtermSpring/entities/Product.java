@@ -17,7 +17,8 @@ public class Product {
     private String name;
     private double price;
 
-    @ManyToMany(mappedBy = "products")
-    private List<Order> orders;
+    // Each product is associated with one order
+    @ManyToOne
+    private Order order;
 }
 

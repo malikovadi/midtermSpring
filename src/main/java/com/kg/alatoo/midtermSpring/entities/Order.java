@@ -9,6 +9,7 @@ import java.util.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "order_table") // Use a custom table name
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +17,12 @@ public class Order {
 
     private String description;
 
+    // Each order references one user
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
+    // Each order can contain multiple products
+    @OneToMany(mappedBy = "order")
     private List<Product> products;
 }
 
