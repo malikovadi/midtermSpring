@@ -7,10 +7,8 @@ import org.mapstruct.*;
 @Mapper
 public interface UserMapper {
 
-    @Mapping(target = "orders", ignore = true) // Ignore mapping for orders (avoid cyclic dependency)
     User userDtoToUser(UserDTO dto);
 
-    @Mapping(target = "orders", ignore = true) // Ignore mapping for orders (avoid cyclic dependency)
     UserDTO userToUserDto(User user);
 }
 

@@ -6,9 +6,10 @@ import org.mapstruct.*;
 
 @Mapper
 public interface OrderMapper {
-    @Mapping(target = "user", ignore = true) // Ignore mapping for user (avoid cyclic dependency)
-    Order orderDtoToOrder(OrderDTO dto);
 
-    @Mapping(target = "user", ignore = true) // Ignore mapping for user (avoid cyclic dependency)
+    @Mapping(source = "user.id", target = "userId")
     OrderDTO orderToOrderDto(Order order);
+
+    @Mapping(source = "userId", target = "user.id")
+    Order orderDtoToOrder(OrderDTO dto);
 }
