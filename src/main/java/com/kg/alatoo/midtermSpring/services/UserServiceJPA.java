@@ -31,7 +31,9 @@ public class UserServiceJPA implements UserService {
     @Override
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(userMapper::userToUserDto).collect(Collectors.toList());
+        return users.stream()
+                .map(userMapper::userToUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -54,6 +56,30 @@ public class UserServiceJPA implements UserService {
         existingUser = userRepository.save(existingUser);
         return userMapper.userToUserDto(existingUser);
     }
+
+    @Override
+    public UserDTO partiallyUpdateUser(Long id, UserDTO userDTO) {
+        User existingUser = userRepository.findById(id).orElse(null);
+        if (existingUser == null) {
+            return null;
+        }
+
+        // Apply partial updates
+        if (userDTO.getName() != null) {
+            existingUser.setName(userDTO.getName());
+        }
+        if (userDTO.getUsername() != null) {
+            existingUser.setUsername(userDTO.getUsername());
+        }
+        if (userDTO.getEmail() != null) {
+            existingUser.setEmail(userDTO.getEmail());
+        }
+        // Add more fields to update as needed
+
+        existingUser = userRepository.save(existingUser);
+        return userMapper.userToUserDto(existingUser);
+    }
+
 
     @Override
     public void deleteUser(Long id) {

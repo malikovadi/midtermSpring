@@ -57,4 +57,21 @@ public class OrderServiceJPA implements OrderService {
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
     }
+
+    @Override
+    public OrderDTO partiallyUpdateOrder(Long id, OrderDTO orderDTO) {
+        Order existingOrder = orderRepository.findById(id).orElse(null);
+        if (existingOrder == null) {
+            return null;
+        }
+
+        // Apply partial updates
+        if (orderDTO.getDescription() != null) {
+            existingOrder.setDescription(orderDTO.getDescription());
+        }
+        // Add more fields to update as needed
+
+        existingOrder = orderRepository.save(existingOrder);
+        return orderMapper.orderToOrderDto(existingOrder);
+    }
 }

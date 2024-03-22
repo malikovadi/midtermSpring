@@ -55,6 +55,27 @@ public class ProductServiceJPA implements ProductService {
     }
 
     @Override
+    public ProductDTO partiallyUpdateProduct(Long id, ProductDTO productDTO) {
+        Product existingProduct = productRepository.findById(id).orElse(null);
+        if (existingProduct == null) {
+            return null;
+        }
+
+        // Apply partial updates
+        if (productDTO.getName() != null) {
+            existingProduct.setName(productDTO.getName());
+        }
+        if (productDTO.getPrice() != 0) {
+            existingProduct.setPrice(productDTO.getPrice());
+        }
+        // Add more fields to update as needed
+
+        existingProduct = productRepository.save(existingProduct);
+        return productMapper.productToProductDto(existingProduct);
+    }
+
+
+    @Override
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
