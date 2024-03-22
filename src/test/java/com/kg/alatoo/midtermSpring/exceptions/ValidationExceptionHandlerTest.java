@@ -1,7 +1,6 @@
 package com.kg.alatoo.midtermSpring.exceptions;
 
 import com.kg.alatoo.midtermSpring.controllers.UserController;
-import com.kg.alatoo.midtermSpring.dto.OrderDTO;
 import com.kg.alatoo.midtermSpring.dto.UserDTO;
 import com.kg.alatoo.midtermSpring.services.OrderService;
 import com.kg.alatoo.midtermSpring.services.ProductService;
