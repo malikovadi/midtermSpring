@@ -5,16 +5,13 @@ import com.kg.alatoo.midtermSpring.dto.OrderDTO;
 import com.kg.alatoo.midtermSpring.services.OrderService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,10 +42,47 @@ public class OrderControllerTest {
     }
 
     @Test
+    public void testGetOrderById() throws Exception {
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setId(1L);
+        orderDTO.setDescription("Test Order");
+
+        when(orderService.getOrderById(1L)).thenReturn(orderDTO);
+
+        mockMvc.perform(get("/api/orders/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.description").value("Test Order"));
+
+        verify(orderService, times(1)).getOrderById(1L);
+    }
+
+    @Test
+    public void testCreateOrder() throws Exception {
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setDescription("Test Order");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String orderJson = objectMapper.writeValueAsString(orderDTO);
+
+        when(orderService.createOrder(any(OrderDTO.class))).thenReturn(orderDTO);
+
+        mockMvc.perform(post("/api/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(orderJson))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.description").value("Test Order"));
+
+        verify(orderService, times(1)).createOrder(any(OrderDTO.class));
+    }
+
+    @Test
     public void testUpdateOrder() throws Exception {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setId(1L);
-        orderDTO.setDescription("Sample Order");
+        orderDTO.setDescription("Updated Order");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String orderJson = objectMapper.writeValueAsString(orderDTO);
@@ -61,8 +95,16 @@ public class OrderControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.description").value("Sample Order"));
+                .andExpect(jsonPath("$.description").value("Updated Order"));
 
         verify(orderService, times(1)).updateOrder(eq(1L), any(OrderDTO.class));
+    }
+
+    @Test
+    public void testDeleteOrder() throws Exception {
+        mockMvc.perform(delete("/api/orders/1"))
+                .andExpect(status().isNoContent());
+
+        verify(orderService, times(1)).deleteOrder(1L);
     }
 }

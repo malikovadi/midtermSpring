@@ -2,7 +2,6 @@ package com.kg.alatoo.midtermSpring.services;
 
 import com.kg.alatoo.midtermSpring.entities.Order;
 import com.kg.alatoo.midtermSpring.dto.OrderDTO;
-import com.kg.alatoo.midtermSpring.entities.User;
 import com.kg.alatoo.midtermSpring.repositories.OrderRepository;
 import com.kg.alatoo.midtermSpring.mappers.OrderMapper;
 import org.junit.jupiter.api.Test;
@@ -48,6 +47,4 @@ class OrderServiceJPATest {
         assertEquals(expectedOrderDTO.getId(), actualOrderDTO.getId());
         assertEquals(expectedOrderDTO.getDescription(), actualOrderDTO.getDescription());
     }
-
-    // Add more test methods for other service operations
 }
