@@ -32,7 +32,7 @@ public class OrderController {
         if (order != null) {
             return new ResponseEntity<>(order, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Order not found with id: " + id);
         }
     }
 
@@ -50,7 +50,7 @@ public class OrderController {
         if (updatedOrder != null) {
             return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Couldn't update order with id: " + id);
         }
     }
 
@@ -61,7 +61,7 @@ public class OrderController {
         if (updatedOrder != null) {
             return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Couldn't update order with id: " + id);
         }
     }
 

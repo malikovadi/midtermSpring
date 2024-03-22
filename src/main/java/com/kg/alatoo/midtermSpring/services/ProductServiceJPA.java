@@ -1,5 +1,6 @@
 package com.kg.alatoo.midtermSpring.services;
 
+import com.kg.alatoo.midtermSpring.controllers.NotFoundException;
 import com.kg.alatoo.midtermSpring.entities.Product;
 import com.kg.alatoo.midtermSpring.dto.ProductDTO;
 import com.kg.alatoo.midtermSpring.repositories.ProductRepository;
@@ -45,7 +46,7 @@ public class ProductServiceJPA implements ProductService {
     public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null) {
-            // Handle product not found error
+            throw new NotFoundException("Couldn't update product with id: " + id);
         }
         existingProduct.setName(productDTO.getName());
         existingProduct.setPrice(productDTO.getPrice());
@@ -58,7 +59,7 @@ public class ProductServiceJPA implements ProductService {
     public ProductDTO partiallyUpdateProduct(Long id, ProductDTO productDTO) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null) {
-            return null;
+            throw new NotFoundException("Couldn't update product with id: " + id);
         }
 
         // Apply partial updates

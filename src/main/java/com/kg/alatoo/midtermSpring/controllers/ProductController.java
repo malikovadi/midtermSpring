@@ -32,7 +32,7 @@ public class ProductController {
         if (product != null) {
             return new ResponseEntity<>(product, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Product not found with id: " + id);
         }
     }
 
@@ -50,7 +50,7 @@ public class ProductController {
         if (updatedProduct != null) {
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Couldn't update product with id: " + id);
         }
     }
 
@@ -61,7 +61,7 @@ public class ProductController {
         if (updatedProduct != null) {
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Couldn't update order with id: " + id);
         }
     }
 

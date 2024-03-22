@@ -1,5 +1,6 @@
 package com.kg.alatoo.midtermSpring.services;
 
+import com.kg.alatoo.midtermSpring.controllers.NotFoundException;
 import com.kg.alatoo.midtermSpring.entities.Order;
 import com.kg.alatoo.midtermSpring.dto.OrderDTO;
 import com.kg.alatoo.midtermSpring.repositories.OrderRepository;
@@ -45,7 +46,7 @@ public class OrderServiceJPA implements OrderService {
     public OrderDTO updateOrder(Long id, OrderDTO orderDTO) {
         Order existingOrder = orderRepository.findById(id).orElse(null);
         if (existingOrder == null) {
-            // Handle order not found error
+            throw new NotFoundException("Couldn't update order with id: " + id);
         }
         existingOrder.setDescription(orderDTO.getDescription());
         // Update other fields as needed
@@ -62,14 +63,13 @@ public class OrderServiceJPA implements OrderService {
     public OrderDTO partiallyUpdateOrder(Long id, OrderDTO orderDTO) {
         Order existingOrder = orderRepository.findById(id).orElse(null);
         if (existingOrder == null) {
-            return null;
+            throw new NotFoundException("Couldn't update order with id: " + id);
         }
 
         // Apply partial updates
         if (orderDTO.getDescription() != null) {
             existingOrder.setDescription(orderDTO.getDescription());
         }
-        // Add more fields to update as needed
 
         existingOrder = orderRepository.save(existingOrder);
         return orderMapper.orderToOrderDto(existingOrder);

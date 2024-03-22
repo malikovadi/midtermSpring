@@ -34,7 +34,7 @@ public class UserController {
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("User not found with id: " + id);
         }
     }
 
@@ -52,7 +52,7 @@ public class UserController {
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new NotFoundException("Couldn't update user with id: " + id);
         }
     }
 
@@ -63,7 +63,7 @@ public class UserController {
         if (updatedUser != null) {
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Couldn't update user with id: " + id);
         }
     }
 

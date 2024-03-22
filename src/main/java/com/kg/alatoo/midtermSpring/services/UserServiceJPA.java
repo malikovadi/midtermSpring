@@ -1,5 +1,6 @@
 package com.kg.alatoo.midtermSpring.services;
 
+import com.kg.alatoo.midtermSpring.controllers.NotFoundException;
 import com.kg.alatoo.midtermSpring.entities.User;
 import com.kg.alatoo.midtermSpring.dto.UserDTO;
 import com.kg.alatoo.midtermSpring.repositories.UserRepository;
@@ -47,12 +48,11 @@ public class UserServiceJPA implements UserService {
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User existingUser = userRepository.findById(id).orElse(null);
         if (existingUser == null) {
-            // Handle user not found error
+            throw new NotFoundException("User not found with id: " + id);
         }
         existingUser.setName(userDTO.getName());
         existingUser.setUsername(userDTO.getUsername());
         existingUser.setEmail(userDTO.getEmail());
-        // Update other fields as needed
         existingUser = userRepository.save(existingUser);
         return userMapper.userToUserDto(existingUser);
     }
@@ -61,7 +61,7 @@ public class UserServiceJPA implements UserService {
     public UserDTO partiallyUpdateUser(Long id, UserDTO userDTO) {
         User existingUser = userRepository.findById(id).orElse(null);
         if (existingUser == null) {
-            return null;
+            throw new NotFoundException("User not found with id: " + id);
         }
 
         // Apply partial updates
