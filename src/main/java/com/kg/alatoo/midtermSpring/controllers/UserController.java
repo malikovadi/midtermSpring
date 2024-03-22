@@ -1,10 +1,12 @@
 package com.kg.alatoo.midtermSpring.controllers;
 
 import com.kg.alatoo.midtermSpring.dto.UserDTO;
+import com.kg.alatoo.midtermSpring.exceptions.NotFoundException;
 import com.kg.alatoo.midtermSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public class UserController {
 
     // GET user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long id) {
+public ResponseEntity<UserDTO> getUserById(@Validated @PathVariable("id") Long id) {
         UserDTO user = userService.getUserById(id);
         if (user != null) {
             return ResponseEntity.ok(user);
@@ -40,14 +42,14 @@ public class UserController {
 
     // POST create new user
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@Validated @RequestBody UserDTO userDTO) {
         UserDTO createdUser = userService.createUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     // PUT update existing user
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@Validated @PathVariable("id") Long id,@Validated @RequestBody UserDTO userDTO) {
         UserDTO updatedUser = userService.updateUser(id, userDTO);
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);
@@ -58,7 +60,7 @@ public class UserController {
 
     // PATCH /api/users/{id}
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDTO> partiallyUpdateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> partiallyUpdateUser(@Validated @PathVariable Long id,@Validated @RequestBody UserDTO userDTO) {
         UserDTO updatedUser = userService.partiallyUpdateUser(id, userDTO);
         if (updatedUser != null) {
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -69,7 +71,7 @@ public class UserController {
 
     // DELETE user by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteUser(@Validated @PathVariable("id") Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

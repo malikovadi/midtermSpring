@@ -1,4 +1,4 @@
-package com.kg.alatoo.midtermSpring.controllers;
+package com.kg.alatoo.midtermSpring.exceptions;
 
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;

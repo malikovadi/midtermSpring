@@ -1,6 +1,6 @@
 package com.kg.alatoo.midtermSpring.services;
 
-import com.kg.alatoo.midtermSpring.controllers.NotFoundException;
+import com.kg.alatoo.midtermSpring.exceptions.NotFoundException;
 import com.kg.alatoo.midtermSpring.entities.Product;
 import com.kg.alatoo.midtermSpring.dto.ProductDTO;
 import com.kg.alatoo.midtermSpring.repositories.ProductRepository;

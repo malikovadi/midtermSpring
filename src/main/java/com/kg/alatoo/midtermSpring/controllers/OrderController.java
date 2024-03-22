@@ -1,9 +1,11 @@
 package com.kg.alatoo.midtermSpring.controllers;
 
 import com.kg.alatoo.midtermSpring.dto.OrderDTO;
+import com.kg.alatoo.midtermSpring.exceptions.NotFoundException;
 import com.kg.alatoo.midtermSpring.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class OrderController {
 
     // GET /api/orders/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> getOrderById(@Validated @PathVariable Long id) {
         OrderDTO order = orderService.getOrderById(id);
         if (order != null) {
             return new ResponseEntity<>(order, HttpStatus.OK);
@@ -38,14 +40,14 @@ public class OrderController {
 
     // POST /api/orders
     @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> createOrder(@Validated @RequestBody OrderDTO orderDTO) {
         OrderDTO createdOrder = orderService.createOrder(orderDTO);
         return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 
     // PUT /api/orders/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<OrderDTO> updateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> updateOrder(@Validated @PathVariable Long id, @Validated @RequestBody OrderDTO orderDTO) {
         OrderDTO updatedOrder = orderService.updateOrder(id, orderDTO);
         if (updatedOrder != null) {
             return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
@@ -56,7 +58,7 @@ public class OrderController {
 
     // PATCH /api/orders/{id}
     @PatchMapping("/{id}")
-    public ResponseEntity<OrderDTO> partiallyUpdateOrder(@PathVariable Long id, @RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<OrderDTO> partiallyUpdateOrder(@Validated @PathVariable Long id,@Validated @RequestBody OrderDTO orderDTO) {
         OrderDTO updatedOrder = orderService.partiallyUpdateOrder(id, orderDTO);
         if (updatedOrder != null) {
             return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
@@ -67,7 +69,7 @@ public class OrderController {
 
     // DELETE /api/orders/{id}
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOrder(@Validated @PathVariable Long id) {
         orderService.deleteOrder(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
