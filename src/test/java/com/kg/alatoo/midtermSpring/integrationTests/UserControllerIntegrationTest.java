@@ -33,7 +33,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     public void testGetAllUsers() throws Exception {
-        // Prepare test data
+//         Prepare test data
         List<UserDTO> userList = new ArrayList<>();
         userList.add(new UserDTO(1L, "John Doe", "adsfds", "john.doe@example.com"));
         userList.add(new UserDTO(2L, "Jane Smith", "adsfds", "jane.smith@example.com"));
@@ -53,6 +53,6 @@ public class UserControllerIntegrationTest {
                 .andExpect(jsonPath("$[1].email").value("jane.smith@example.com"));
 
         // Verify that the service method was called
-//        verify(userService, times(1)).getAllUsers();
+        verify(userService, times(1)).getAllUsers();
     }
 }

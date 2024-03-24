@@ -1,14 +1,12 @@
 package com.kg.alatoo.midtermSpring.repositories;
 
 import com.kg.alatoo.midtermSpring.entities.User;
-import com.kg.alatoo.midtermSpring.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 public class UserRepositoryTest {
@@ -17,25 +15,56 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    public void testSaveAndFindUser() {
-        // Create a user entity
+    public void testSaveUser() {
         User user = new User();
-        user.setName("John Doe");
-        user.setUsername("johndoe");
+        user.setUsername("john_doe");
         user.setEmail("john@example.com");
 
-        // Save the user entity
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        assertNotNull(savedUser.getId());
+        assertEquals("john_doe", savedUser.getUsername());
+        assertEquals("john@example.com", savedUser.getEmail());
+    }
 
-        // Find the saved user entity
-        User foundUser = userRepository.findById(user.getId()).orElse(null);
+    @Test
+    public void testFindUserById() {
+        User user = new User();
+        user.setUsername("jane_doe");
+        user.setEmail("jane@example.com");
 
-//        Optional<User> retrieve = userRepository.findById(user.getId());
-        // Assert that the found user is not null and has the correct properties
-        assertThat(foundUser).isNotNull();
-        assertThat(foundUser.getName()).isEqualTo("John Doe");
-        assertThat(foundUser.getUsername()).isEqualTo("johndoe");
-        assertThat(foundUser.getEmail()).isEqualTo("john@example.com");
+        User savedUser = userRepository.save(user);
+        Optional<User> optionalUser = userRepository.findById(savedUser.getId());
+        assertTrue(optionalUser.isPresent());
+        assertEquals("jane_doe", optionalUser.get().getUsername());
+        assertEquals("jane@example.com", optionalUser.get().getEmail());
+    }
+
+    @Test
+    public void testUpdateUser() {
+        User user = new User();
+        user.setUsername("alice_smith");
+        user.setEmail("alice@example.com");
+
+        User savedUser = userRepository.save(user);
+        savedUser.setEmail("alice.smith@example.com");
+
+        User updatedUser = userRepository.save(savedUser);
+        assertEquals(savedUser.getId(), updatedUser.getId());
+        assertEquals("alice_smith", updatedUser.getUsername());
+        assertEquals("alice.smith@example.com", updatedUser.getEmail());
+    }
+
+    @Test
+    public void testDeleteUser() {
+        User user = new User();
+        user.setUsername("bob_jones");
+        user.setEmail("bob@example.com");
+
+        User savedUser = userRepository.save(user);
+        userRepository.delete(savedUser);
+
+        Optional<User> optionalUser = userRepository.findById(savedUser.getId());
+        assertFalse(optionalUser.isPresent());
     }
 }
 

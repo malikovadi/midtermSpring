@@ -32,7 +32,9 @@ public class OrderServiceJPA implements OrderService {
     @Override
     public List<OrderDTO> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
-        return orders.stream().map(orderMapper::orderToOrderDto).collect(Collectors.toList());
+        return orders.stream().
+                map(orderMapper::orderToOrderDto)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.kg.alatoo.midtermSpring.repositories;
 
 import com.kg.alatoo.midtermSpring.entities.Product;
-import com.kg.alatoo.midtermSpring.repositories.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 public class ProductRepositoryTest {
@@ -15,22 +16,55 @@ public class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Test
-    public void testSaveAndFindProduct() {
-        // Create a product entity
+    public void testSaveProduct() {
         Product product = new Product();
-        product.setName("Laptop");
-        product.setPrice(999.99);
+        product.setName("Test Product");
+        product.setPrice(10.0);
 
-        // Save the product entity
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        assertNotNull(savedProduct.getId());
+        assertEquals("Test Product", savedProduct.getName());
+        assertEquals(10.0, savedProduct.getPrice());
+    }
 
-        // Find the saved product entity
-        Product foundProduct = productRepository.findById(product.getId()).orElse(null);
+    @Test
+    public void testFindProductById() {
+        Product product = new Product();
+        product.setName("Test Product");
+        product.setPrice(10.0);
 
-        // Assert that the found product is not null and has the correct properties
-        assertThat(foundProduct).isNotNull();
-        assertThat(foundProduct.getName()).isEqualTo("Laptop");
-        assertThat(foundProduct.getPrice()).isEqualTo(999.99);
+        Product savedProduct = productRepository.save(product);
+        Optional<Product> optionalProduct = productRepository.findById(savedProduct.getId());
+        assertTrue(optionalProduct.isPresent());
+        assertEquals("Test Product", optionalProduct.get().getName());
+        assertEquals(10.0, optionalProduct.get().getPrice());
+    }
+
+    @Test
+    public void testUpdateProduct() {
+        Product product = new Product();
+        product.setName("Test Product");
+        product.setPrice(10.0);
+
+        Product savedProduct = productRepository.save(product);
+        savedProduct.setPrice(15.0);
+
+        Product updatedProduct = productRepository.save(savedProduct);
+        assertEquals(savedProduct.getId(), updatedProduct.getId());
+        assertEquals("Test Product", updatedProduct.getName());
+        assertEquals(15.0, updatedProduct.getPrice());
+    }
+
+    @Test
+    public void testDeleteProduct() {
+        Product product = new Product();
+        product.setName("Test Product");
+        product.setPrice(10.0);
+
+        Product savedProduct = productRepository.save(product);
+        productRepository.delete(savedProduct);
+
+        Optional<Product> optionalProduct = productRepository.findById(savedProduct.getId());
+        assertFalse(optionalProduct.isPresent());
     }
 }
-

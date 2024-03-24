@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -21,7 +22,8 @@ public class DtoValidationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidUserJson));
+                        .content(invalidUserJson))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 
@@ -31,7 +33,8 @@ public class DtoValidationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/orders")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidOrderJson));
+                        .content(invalidOrderJson))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
 
@@ -41,6 +44,7 @@ public class DtoValidationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidProductJson));
+                        .content(invalidProductJson))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

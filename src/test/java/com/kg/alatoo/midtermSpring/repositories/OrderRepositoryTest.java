@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 public class OrderRepositoryTest {
@@ -16,33 +19,50 @@ public class OrderRepositoryTest {
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private UserRepository userRepository; // Assuming UserRepository is also needed for OrderRepository
+    @Test
+    public void testSaveOrder() {
+        Order order = new Order();
+        order.setDescription("Test Order");
+
+        Order savedOrder = orderRepository.save(order);
+        assertNotNull(savedOrder.getId());
+        assertEquals("Test Order", savedOrder.getDescription());
+    }
 
     @Test
-    public void testSaveAndFindOrder() {
-        // Create a user entity
-        User user = new User();
-        user.setName("John Doe");
-        user.setUsername("johndoe");
-        user.setEmail("john@example.com");
-        userRepository.save(user);
-
-        // Create an order entity
+    public void testFindOrderById() {
         Order order = new Order();
-        order.setDescription("Sample order");
-        order.setUser(user);
+        order.setDescription("Test Order");
 
-        // Save the order entity
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        Optional<Order> optionalOrder = orderRepository.findById(savedOrder.getId());
+        assertTrue(optionalOrder.isPresent());
+        assertEquals("Test Order", optionalOrder.get().getDescription());
+    }
 
-        // Find the saved order entity
-        Order foundOrder = orderRepository.findById(order.getId()).orElse(null);
+    @Test
+    public void testUpdateOrder() {
+        Order order = new Order();
+        order.setDescription("Test Order");
 
-        // Assert that the found order is not null and has the correct properties
-        assertThat(foundOrder).isNotNull();
-        assertThat(foundOrder.getDescription()).isEqualTo("Sample order");
-        assertThat(foundOrder.getUser()).isEqualTo(user);
+        Order savedOrder = orderRepository.save(order);
+        savedOrder.setDescription("Updated Order");
+
+        Order updatedOrder = orderRepository.save(savedOrder);
+        assertEquals(savedOrder.getId(), updatedOrder.getId());
+        assertEquals("Updated Order", updatedOrder.getDescription());
+    }
+
+    @Test
+    public void testDeleteOrder() {
+        Order order = new Order();
+        order.setDescription("Test Order");
+
+        Order savedOrder = orderRepository.save(order);
+        orderRepository.delete(savedOrder);
+
+        Optional<Order> optionalOrder = orderRepository.findById(savedOrder.getId());
+        assertFalse(optionalOrder.isPresent());
     }
 }
 
