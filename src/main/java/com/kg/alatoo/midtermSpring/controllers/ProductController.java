@@ -1,5 +1,6 @@
 package com.kg.alatoo.midtermSpring.controllers;
 
+import com.kg.alatoo.midtermSpring.dto.OrderDTO;
 import com.kg.alatoo.midtermSpring.dto.ProductDTO;
 import com.kg.alatoo.midtermSpring.exceptions.NotFoundException;
 import com.kg.alatoo.midtermSpring.services.ProductService;
@@ -36,6 +37,12 @@ public class ProductController {
         } else {
             throw new NotFoundException("Product not found with id: " + id);
         }
+    }
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<List<ProductDTO>> getOrdersByUserId(@PathVariable Long orderId) {
+        List<ProductDTO> products = productService.getProductsByOrderId(orderId);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     // POST /api/products

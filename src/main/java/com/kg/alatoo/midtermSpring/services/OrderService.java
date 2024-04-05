@@ -12,4 +12,6 @@ public interface OrderService {
     void deleteOrder(Long id);
 
     OrderDTO partiallyUpdateOrder(Long id, OrderDTO orderDTO);
+
+    List<OrderDTO> getOrdersByUserId(Long userId);
 }

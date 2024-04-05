@@ -30,6 +30,14 @@ public class ProductServiceJPA implements ProductService {
     }
 
     @Override
+    public List <ProductDTO> getProductsByOrderId(Long orderId){
+        List<Product> products = productRepository.findByOrderId(orderId);
+        return products.stream()
+                .map(productMapper::productToProductDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream().map(productMapper::productToProductDto).collect(Collectors.toList());

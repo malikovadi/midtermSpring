@@ -1,6 +1,7 @@
 package com.kg.alatoo.midtermSpring.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import java.util.*;
 
@@ -15,6 +16,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Description is required")
     private String description;
 
     // Each order references one user

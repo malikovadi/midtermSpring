@@ -30,6 +30,14 @@ public class OrderServiceJPA implements OrderService {
     }
 
     @Override
+    public List<OrderDTO> getOrdersByUserId(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        return orders.stream()
+                .map(orderMapper::orderToOrderDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<OrderDTO> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream().
