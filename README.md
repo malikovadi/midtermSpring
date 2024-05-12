@@ -37,20 +37,26 @@ Authentication and Authorization Mechanisms
 Traditional Username and Password Login with JWT Token
 For traditional username and password login, we have implemented a JWT (JSON Web Token) based authentication mechanism. Here's how it works:
 
-Registration: Users can register with their email address, username, and password. Upon successful registration, the password is securely hashed and stored in the database.
+Authentication and Authorization Mechanisms
+Traditional Username/Password Login with JWT Token
+Registration: Users register with their email, username, and password. Passwords are securely hashed before storage.
 
-Authentication: Users can log in using their username/email and password. Upon successful authentication, a JWT token is generated and returned to the client. This token is used for subsequent API requests to authenticate the user.
+Authentication: Users log in with their username/email and password. Upon successful login, a JWT token is generated and returned.
 
-JWT Token: The JWT token contains encoded user information and is signed using a secret key known only to the server. It has an expiration time to enhance security.
+JWT Token: JSON Web Token containing user information, signed with a secret key. Used for subsequent API requests and has an expiration time.
 
-Authorization: Protected endpoints in our application require the client to include the JWT token in the Authorization header of the HTTP request. The server validates the token and grants access to authorized resources.
+Authorization: Protected endpoints require the JWT token in the Authorization header. The server validates the token to grant access.
 
-Social Authentication with Google, GitHub, and Facebook
-We also support social authentication using OAuth 2.0 with popular identity providers such as Google, GitHub, and Facebook. Here's how it works:
+Social Authentication with OAuth 2.0 Providers
+OAuth 2.0 Flow: Users sign in with Google, GitHub, or Facebook. This redirects them to the provider's authentication page.
 
-OAuth 2.0 Flow: Users can choose to sign in with their Google, GitHub, or Facebook accounts. This initiates the OAuth 2.0 flow, redirecting the user to the respective identity provider's authentication page.
+User Consent: Users consent to share profile information. The provider redirects them back with an authorization code.
 
-User Consent: The user is prompted to consent to sharing their profile information with our application. Once consent is granted, the identity provider redirects the user back to our application with an authorization code.
+Token Exchange: Our app exchanges the code for an access token and possibly a refresh token.
+
+User Creation/Authentication: New users are created using profile info. Existing users are authenticated, and a JWT token is issued.
+
+Authorization: The JWT token from social login is used for access to protected resources.
 
 Token Exchange: Our application exchanges the authorization code for an access token and optionally a refresh token with the identity provider's token endpoint.
 
