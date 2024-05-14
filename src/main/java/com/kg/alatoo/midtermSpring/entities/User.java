@@ -23,15 +23,20 @@ public class User {
     private String name;
 
     @NotBlank(message = "Username is required")
-    @Size(max = 100, message = "Username must be between 4 and 20 characters")
+    @Size(max = 100, message = "Username must be up to 100 characters")
     private String username;
 
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
     private String email;
 
+    private String password;
+
     // Each user can have multiple orders
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Set<Roles> roles;
 }
 

@@ -1,23 +1,19 @@
 package com.kg.alatoo.midtermSpring.dto;
-
+import com.kg.alatoo.midtermSpring.entities.Roles;
 import com.kg.alatoo.midtermSpring.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    // Constructor that accepts a User object
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.name = user.getName();
-        this.username = user.getUsername();
-        this.email = user.getEmail();
-    }
     private Long id;
 
     @NotBlank(message = "Name is required")
@@ -30,5 +26,10 @@ public class UserDTO {
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
     private String email;
+
+    public UserDTO(User user) {
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+    }
 
 }

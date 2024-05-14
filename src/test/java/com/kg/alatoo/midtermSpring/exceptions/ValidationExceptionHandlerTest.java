@@ -52,7 +52,7 @@ public class ValidationExceptionHandlerTest {
     @Test
     public void testGetUserById() throws Exception {
         // Mocking service behavior
-        UserDTO userDTO = new UserDTO();
+        UserDTO userDTO = new UserDTO(user);
         userDTO.setId(1L);
         userDTO.setName("John Doe");
         // Mocking the behavior of the service method to return a specific user by ID

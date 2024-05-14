@@ -23,7 +23,7 @@ public class RefreshTokenService {
 
     public RefreshToken createRefreshToken(String username){
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NoSuchElementException("No user found with username: " + username));;
+                .orElseThrow(() -> new NoSuchElementException("No user found with username: " + username));
         RefreshToken refreshToken = RefreshToken.builder()
                 .user(user)
                 .token(UUID.randomUUID().toString())

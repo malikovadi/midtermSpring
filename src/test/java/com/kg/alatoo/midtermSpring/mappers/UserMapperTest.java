@@ -18,7 +18,7 @@ public class UserMapperTest {
     @Test
     public void testUserDtoToUser() {
         // Given
-        UserDTO userDTO = new UserDTO();
+        UserDTO userDTO = new UserDTO(user);
         userDTO.setName("John Doe");
         userDTO.setEmail("john.doe@example.com");
 

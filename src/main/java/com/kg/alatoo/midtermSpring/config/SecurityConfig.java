@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         req -> req
                                 .requestMatchers("/api/v1/auth/login","/api/v1/auth/refreshToken", "/api/v1/auth/register").permitAll()
+                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/**").authenticated()
                 )
                 .oauth2Login(Customizer.withDefaults())

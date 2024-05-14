@@ -1,61 +1,97 @@
 package com.kg.alatoo.midtermSpring.bootstrap;
 
-import com.kg.alatoo.midtermSpring.dto.OrderDTO;
-import com.kg.alatoo.midtermSpring.dto.ProductDTO;
-import com.kg.alatoo.midtermSpring.dto.UserDTO;
-import com.kg.alatoo.midtermSpring.services.OrderService;
-import com.kg.alatoo.midtermSpring.services.ProductService;
-import com.kg.alatoo.midtermSpring.services.UserService;
+
+import com.kg.alatoo.midtermSpring.entities.Order;
+import com.kg.alatoo.midtermSpring.entities.Product;
+import com.kg.alatoo.midtermSpring.entities.Roles;
+import com.kg.alatoo.midtermSpring.entities.User;
+import com.kg.alatoo.midtermSpring.repositories.OrderRepository;
+import com.kg.alatoo.midtermSpring.repositories.ProductRepository;
+import com.kg.alatoo.midtermSpring.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
-public class InitData implements CommandLineRunner {
+    public class InitData implements CommandLineRunner {
 
-    private final UserService userService;
-    private final OrderService orderService;
-    private final ProductService productService;
+        @Autowired
+        private UserRepository userRepository;
 
-    public InitData(UserService userService, OrderService orderService, ProductService productService) {
-        this.userService = userService;
-        this.orderService = orderService;
-        this.productService = productService;
-    }
+        @Autowired
+        private OrderRepository orderRepository;
 
-    @Override
-    public void run(String... args) throws Exception {
-        // Create 20 users
-        for (int i = 0; i < 20; i++) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setName("User" + (i + 1));
-            userDTO.setEmail("user" + (i + 1) + "@example.com");
-            userDTO.setUsername("user" + (i + 1) + "_username");
-            userService.createUser(userDTO);
-        }
+        @Autowired
+        private ProductRepository productRepository;
 
-        // Create orders for each user
-        List<UserDTO> users = userService.getAllUsers();
-        for (UserDTO user : users) {
-            OrderDTO orderDTO = new OrderDTO();
-            orderDTO.setDescription("Order for " + user.getName());
-            orderDTO.setUserId(user.getId());
-            orderService.createOrder(orderDTO);
-        }
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
-        // Create products for each order
-        List<OrderDTO> orders = orderService.getAllOrders();
-        for (OrderDTO order : orders) {
-            for (int i = 0; i < 5; i++) {
-                ProductDTO productDTO = new ProductDTO();
-                productDTO.setName("Product" + (i + 1) + " for Order " + order.getId());
-                productDTO.setPrice(10.0 * (i + 1));
-                productDTO.setOrderId(order.getId());
-                productService.createProduct(productDTO);
+        @Override
+        public void run(String... args) {
+            User admin = User.builder()
+                    .name("Adilet")
+                    .username("admin")
+                    .email("admin@gmail.com")
+                    .roles(Set.of(Roles.ADMIN, Roles.STAFF))
+                    .password(passwordEncoder.encode("password"))
+                    .build();
+            User staff = User.builder()
+                    .name("Argen")
+                    .username("staff")
+                    .email("staff@gmail.com")
+                    .password(passwordEncoder.encode("password"))
+                    .roles(Set.of(Roles.STAFF))
+                    .build();
+            userRepository.saveAll(List.of(admin, staff));
+
+            try {
+                // Create users
+                Set<User> users = new HashSet<>();
+                for (int i = 0; i < 50; i++) {
+                    User user = User.builder()
+                            .name("User " + i)
+                            .username("user" + i)
+                            .email("user" + i + "@example.com")
+                            .roles(Set.of(Roles.USER))
+                            .password(passwordEncoder.encode("password"))
+                            .build();
+                    users.add(user);
+                }
+                userRepository.saveAll(users);
+
+                // Create orders for each user
+                Set<Order> orders = new HashSet<>();
+                for (User user : users) {
+                    Order order = Order.builder()
+                            .user(user)
+                            .description("Order for " + user.getName())
+                            .build();
+                    orders.add(order);
+                }
+                orderRepository.saveAll(orders);
+
+                // Create products for each order
+                Set<Product> products = new HashSet<>();
+                for (Order order : orders) {
+                    for (int i = 0; i < 5; i++) {
+                        Product product = Product.builder()
+                                .order(order)
+                                .name("Product " + (i + 1) + " for Order " + order.getId())
+                                .price(10.0 * (i + 1))
+                                .build();
+                        products.add(product);
+                    }
+                }
+                productRepository.saveAll(products);
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-
     }
-}
